@@ -1,0 +1,358 @@
+Model:
+
+Module:
+CompanyId
+EntityId
+List of modules()
+
+Sales:
+Role
+Phone number
+Entity Id(Many to Many) // Initially assume 1 sales on 1 company
+
+Entity:
+Industry
+Employess
+Annual Revenue
+(list of sales)
+
+Lead:
+Sale Id
+Company name
+First Name
+Last Name
+Phone
+Email
+Entity Id
+
+Contact:
+First Name
+Last Name
+Phone
+Email
+Company Id(optional)
+Entity Id
+
+Company:
+Sales Id
+Industry
+Employee
+Annual Revenue
+Entity Id
+
+Task:
+Type Id
+Type:Customer/Company/Lead/Deal
+Contact Id
+Subject
+Status
+Location
+Date
+Note
+Entity Id
+
+Note:
+Type Id
+Type:Customer/Company/Lead/Deal/Task
+
+Deal:
+Sales Id
+Deal Name
+Customer Name |
+Company Name |
+Expected Revenue
+Expected Closing
+Status
+
+
+LeadTask:
+Sale Id
+Contact Id
+Subject
+Status
+Location
+Date
+Note
+Entity Id
+
+API:
+
+USER
+
+Register:
+Email
+Password
+Entity Name
+First Name
+Last Name
+
+Login:
+Email
+Password
+
+Add Sales:
+Email
+
+Register Sales:
+First Name
+Last Name
+Password
+
+Modify Role:
+
+Forget/Change password
+
+Modify Firstname and lastname
+
+Get email, firstname, lastname and role
+
+LEADS
+
+Add Leads
+First Name
+Last Name
+Email
+Phone
+Mobile
+
+Modify Leads
+
+Add Lead Task
+
+Modify Lead Task
+
+Convert Leads
+
+Get All Leads
+
+Get Task in Lead
+
+CUSTOMER
+Add customer
+Modify customer
+
+Get all Customer
+Get all Task, Note in Customer
+
+Company
+Add Company
+Modify Company
+
+Get all Company
+Get all Task, Note in a Company
+
+DEAL:
+Create Deal
+Modify Deal
+
+Get all Deal
+Get all Task, Note in a deal
+
+Task/Feed:
+Get the latest action(Across the company)
+
+
+
+MODEL:
+Entity
+Module
+Employee
+Lead
+Company
+Customer
+Deal
+Task
+Note
+
+
+DONE:
+Entity
+Employee
+LEAD
+COMPANY
+CUSTOMER
+DEAL
+TASK
+NOTE
+
+TODO:
+Database indexing
+pagination
+order by(Ask aldo how to order it)
+How to structure deal and task
+
+Think of Entity limit, how to suspend account
+
+https://micropyramid.com/blog/understanding-genericforeignkey-in-django/
+
+https://docs.djangoproject.com/en/1.10/ref/contrib/contenttypes/
+http://voorloopnul.com/blog/using-django-generic-relations/
+https://docs.djangoproject.com/en/1.10/ref/contrib/contenttypes/
+http://stackoverflow.com/questions/20895429/how-exactly-do-django-content-types-work
+
+http://stackoverflow.com/questions/6335986/how-can-i-restrict-djangos-genericforeignkey-to-a-list-of-models
+https://medium.com/@bhrigu/django-how-to-add-foreignkey-to-multiple-models-394596f06e84#.3x4it8tfm
+
+
+Get queryset field values:
+Lead.objects.last().tasks.values('is_deleted')
+
+http://localhost:8000/companies/?employee=7
+
+DONE:
+Lead
+Company
+Customer
+Deal
+Retrieve and get Employee
+Note:Create, Deleted
+Tasks
+Timeline & task bubble up
+Transaction
+Algolia filter by status
+
+TODO:
+Meeting
+Sync add contact_ct
+Dashboard page API
+Import
+
+Meeting:
+Model
+Relation Model
+
+Timeline, algolia
+
+Event = 17
+Task = 14
+Deal = 13
+Customer = 12
+Company = 11
+Lead = 10
+
+{"entity":6, "employee":7, "content_type":13, "object_id":5, "note": "Need to get this done soon"}
+
+
+task = Task.objects.first()
+lead= Lead.objects.first()
+from timelines.utils import *
+timeline_dict = build_timeline_dict('Created', task, lead)
+timeline = Timeline.objects.first()
+timeline.content['timeline']
+timeline.content['timeline'].insert(0, timeline_dict)
+timeline.content
+timeline.save()
+
+timeline = Timeline.objects.first()
+timeline.add_timeline_content('Created', Task.objects.first(), Lead.objects.first())
+
+
+Task need to have at least entity, employee and contact/lead, and deal/order etc
+
+Deal need to have at least entity, employee, contact(no lead)
+
+When task is saved, write it to contact/lead and potentially account, deal/order wall
+
+when deal is saved, write it to contact and potentially account wall
+
+
+/**
+Task need to have at least entity, employee and contact/lead, and deal/order etc
+
+Deal need to have at least entity, employee, contact(no lead)
+
+When task is saved, write it to contact/lead and potentially account, deal/order wall
+
+when deal is saved, write it to contact and potentially account wall
+
+Timeline in account, lead/contact, deals, orders
+
+Timeline write in task, events, deals, order
+
+[TASK/DEAL] [CREATED/UDPATED] FOR [EMPLOYEE]
+**/
+
+
+API for config
+API for all customer/contact
+
+DONE refactoring:
+Company
+Customer
+Lead
+Task
+Deal
+
+DONE Timeline
+
+User Management:
+User role
+Add employee
+Activation for employee email & form (probably same with forgot password)
+Forgot password (Email & Page)
+
+change password (Email & Page)
+algolia
+
+DONE
+Add new user
+Reset password
+Login
+Add new user
+List
+Update user role
+update self employee data
+sync
+
+TODO:
+
+
+Next big thing:
+Algolia:
+Index per entity
+
+Lead
+Customer
+Account
+Task
+https://www.algolia.com/doc/faq/searching/how-can-i-restrict-the-results-to-objects-my-user-has-access-to
+https://www.algolia.com/doc/api-client/python/api-keys#generate-key
+
+Create separate index for each entity(Customer, Leads, Contacts, Account)
+Sync return API key that can only access that indices
+
+Wrapper that return the index
+
+Import
+
+Convert
+Dashboard
+
+
+DONE:
+serializers
+index
+
+Done:
+Company
+Customer
+Lead
+Deal
+
+Todo:
+Import field
+Dev/Prod setup
+
+http://cloudinary.com/documentation/upload_images#uploading_with_a_direct_call_to_the_api
+http://cloudinary.com/documentation/upload_images#creating_api_authentication_signatures
+http://cloudinary.com/documentation/image_upload_api_reference
+
+http://beerlington.com/blog/2014/07/13/direct-image-uploads-with-emberjs-and-cloudinary/
+
+
+https://github.com/girasquid/django-csv-importer
+https://github.com/edcrewe/django-csvimport
+http://django-adaptors.readthedocs.io/en/latest/
+
+http://stackoverflow.com/questions/1626326/how-to-manage-local-vs-production-settings-in-django
+http://stackoverflow.com/questions/8826534/how-can-i-correctly-set-django-settings-module-for-my-django-project-i-am-using
